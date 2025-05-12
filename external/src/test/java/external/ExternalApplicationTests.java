@@ -1,10 +1,10 @@
-package library_search;
+package external;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LibrarySearchApplicationTests {
+class ExternalApplicationTests {
 
 	@Test
 	void contextLoads() {
