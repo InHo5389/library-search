@@ -4,11 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-<<<<<<< HEAD
 group = 'com.example'
-=======
-group = 'com.library'
->>>>>>> LS-0-epic
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -25,19 +21,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	implementation project(":common")
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-<<<<<<< HEAD
-=======
-
-bootJar {
-	enabled = false
-}
-
-jar {
-	enabled = true
-}
->>>>>>> LS-0-epic
