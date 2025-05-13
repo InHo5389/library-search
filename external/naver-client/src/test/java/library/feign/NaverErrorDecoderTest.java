@@ -3,6 +3,8 @@ package library.feign;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Request;
 import feign.Response;
+import library.ApiException;
+import library.ErrorType;
 import library.NaverErrorResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,11 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +31,7 @@ class NaverErrorDecoderTest {
     private NaverErrorDecoder errorDecoder;
 
     @Test
-    @DisplayName("에러디코더에서 에러발생시 RuntimeException 예외가 throw 된다.")
+    @DisplayName("에러디코더에서 에러발생시 ApiException 예외가 throw 된다.")
     void throwsRuntimeExceptionWhenErrorOccurs() throws IOException {
         //given
         Response.Body responseBody = mock(Response.Body.class);
@@ -50,7 +54,7 @@ class NaverErrorDecoderTest {
         assertThatThrownBy(() -> {
             errorDecoder.decode("methodKey", response);
         })
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(ApiException.class)
                 .hasMessage("error!!");
     }
 }
