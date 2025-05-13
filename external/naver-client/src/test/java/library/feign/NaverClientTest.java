@@ -1,5 +1,6 @@
 package library.feign;
 
+import library.NaverBookResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,9 @@ class NaverClientTest {
     void callNaverSearch(){
         //given
         //when
-        String http = naverClient.search("HTTP", 1, 10);
-        System.out.println(http);
+        NaverBookResponse response = naverClient.search("HTTP", 1, 10);
+        System.out.println(response);
         //then
-        assertThat(http).isNotNull();
+        assertThat(response).isNotNull();
     }
 }
