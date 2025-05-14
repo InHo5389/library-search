@@ -1,6 +1,7 @@
 package library;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Getter
 @ToString
+@AllArgsConstructor
 public class NaverBookResponse {
 
     private String lastBuildDate;
@@ -29,5 +31,13 @@ public class NaverBookResponse {
         private String pubDate;
         private String isbn;
         private String description;
+
+        public NaverBookItemDto(String title, String author, String publisher, String pubDate, String isbn) {
+            this.title = title;
+            this.author = author;
+            this.publisher = publisher;
+            this.pubDate = pubDate;
+            this.isbn = isbn;
+        }
     }
 }
