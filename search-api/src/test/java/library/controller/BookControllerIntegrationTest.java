@@ -3,7 +3,7 @@ package library.controller;
 import library.controller.request.SearchRequest;
 import library.controller.response.PageResult;
 import library.controller.response.SearchResponse;
-import library.service.BookQueryService;
+import library.service.BookApplicationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ class BookControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private BookQueryService bookQueryService;
+    private BookApplicationService bookApplicationService;
 
     @Test
     @DisplayName("정상인자로 요청시 성공한다.")
@@ -44,7 +44,7 @@ class BookControllerIntegrationTest {
         int totalElements = 10;
         PageResult<SearchResponse> result = new PageResult<>(page,size, totalElements, List.of());
 
-        when(bookQueryService.search(query,page,size))
+        when(bookApplicationService.search(query,page,size))
                 .thenReturn(result);
         //when
         //then
@@ -72,7 +72,7 @@ class BookControllerIntegrationTest {
         int totalElements = 10;
         PageResult<SearchResponse> result = new PageResult<>(page,size, totalElements, List.of());
 
-        when(bookQueryService.search(query,page,size))
+        when(bookApplicationService.search(query,page,size))
                 .thenReturn(result);
         //when
         //then
@@ -98,7 +98,7 @@ class BookControllerIntegrationTest {
         int totalElements = 10;
         PageResult<SearchResponse> result = new PageResult<>(page,size, totalElements, List.of());
 
-        when(bookQueryService.search(query,page,size))
+        when(bookApplicationService.search(query,page,size))
                 .thenReturn(result);
         //when
         //then
@@ -123,7 +123,7 @@ class BookControllerIntegrationTest {
         int totalElements = 10;
         PageResult<SearchResponse> result = new PageResult<>(page,size, totalElements, List.of());
 
-        when(bookQueryService.search(query,page,size))
+        when(bookApplicationService.search(query,page,size))
                 .thenReturn(result);
         //when
         //then
