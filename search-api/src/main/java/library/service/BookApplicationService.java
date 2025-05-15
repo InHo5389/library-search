@@ -2,11 +2,13 @@ package library.service;
 
 import library.controller.response.PageResult;
 import library.controller.response.SearchResponse;
+import library.controller.response.StatResponse;
 import library.entity.DailyStat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 public class BookApplicationService {
 
     private final BookQueryService bookQueryService;
+    private final DailyStatQueryService dailyStatQueryService;
     private final DailyStatCommandService dailyStatCommandService;
 
     /**
@@ -27,5 +30,10 @@ public class BookApplicationService {
         dailyStatCommandService.save(new DailyStat(query, LocalDateTime.now()));
 
         return response;
+    }
+
+    @Transactional(readOnly = true)
+    public StatResponse findQueryCount(String query, LocalDate date) {
+        return dailyStatQueryService.findQueryCount(query, date);
     }
 }
