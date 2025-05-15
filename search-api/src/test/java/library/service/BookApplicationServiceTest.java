@@ -2,6 +2,7 @@ package library.service;
 
 import library.controller.response.PageResult;
 import library.controller.response.SearchResponse;
+import library.controller.response.StatResponse;
 import library.entity.DailyStat;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +32,9 @@ class BookApplicationServiceTest {
     @Mock
     private DailyStatCommandService dailyStatCommandService;
 
+    @Mock
+    private DailyStatQueryService dailyStatQueryService;
+
     @Test
     @DisplayName("search() 호출 시 검색 결과를 반환하면서 통계데이터를 저장한다.")
     void shouldSaveStatsWhenSearching() {
@@ -45,7 +49,7 @@ class BookApplicationServiceTest {
                 new SearchResponse("HTTP1", "author1", "1", LocalDate.of(2025, 5, 15), "isbn1"),
                 new SearchResponse("HTTP2", "author2", "2", LocalDate.of(2025, 5, 16), "isbn2")
         );
-        PageResult<SearchResponse> result = new PageResult<>(page,size, totalElements,searchResponses);
+        PageResult<SearchResponse> result = new PageResult<>(page, size, totalElements, searchResponses);
         when(bookQueryService.search(query, page, size)).thenReturn(result);
 
         when(dailyStatCommandService.save(any()))
@@ -57,10 +61,51 @@ class BookApplicationServiceTest {
         assertThat(result1.getSize()).isEqualTo(size);
         assertThat(result1.getTotalElements()).isEqualTo(totalElements);
         assertThat(result1.getContents()).hasSize(2)
-                        .extracting("title","author","isbn")
-                                .containsExactlyInAnyOrder(
-                                        Tuple.tuple("HTTP1","author1","isbn1"),
-                                        Tuple.tuple("HTTP2","author2","isbn2")
-                                );
+                .extracting("title", "author", "isbn")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("HTTP1", "author1", "isbn1"),
+                        Tuple.tuple("HTTP2", "author2", "isbn2")
+                );
+    }
+
+    @Test
+    @DisplayName("findQueryCount호출시 query와 count를 그대로 넘긴다.")
+    void findQueryCount() {
+        //given
+        String query = "HTTP";
+        LocalDate date = LocalDate.now();
+        when(dailyStatQueryService.findQueryCount(query, date))
+                .thenReturn(new StatResponse(query, 2));
+        //when
+        StatResponse response = bookApplicationService.findQueryCount(query, date);
+        //then
+        assertThat(response.getCount()).isEqualTo(2);
+        assertThat(response.getQuery()).isEqualTo(query);
+    }
+
+    @Test
+    @DisplayName("findTop5Query 호출 시 상위 5개가 응답된다.")
+    void findTop5Query() {
+        //given
+        List<StatResponse> searchResponses = List.of(
+                new StatResponse("HTTP", 10L),
+                new StatResponse("JAVA", 8L),
+                new StatResponse("KAFKA", 7L),
+                new StatResponse("PYTHON", 3L),
+                new StatResponse("DOCKER", 2L)
+        );
+        when(dailyStatQueryService.findTop5Query()).thenReturn(searchResponses);
+        //when
+        List<StatResponse> responseList = bookApplicationService.findTop5Query();
+        //then
+        assertThat(responseList).hasSize(5)
+                .extracting("query", "count")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("HTTP", 10L),
+                        Tuple.tuple("JAVA", 8L),
+                        Tuple.tuple("KAFKA", 7L),
+                        Tuple.tuple("PYTHON", 3L),
+                        Tuple.tuple("DOCKER", 2L)
+                );
     }
 }

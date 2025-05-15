@@ -1,0 +1,37 @@
+package library.service;
+
+import library.controller.response.StatResponse;
+import library.repository.DailyStatRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class DailyStatQueryService {
+
+    private static final int PAGE_NUMBER = 0;
+    private static final int PAGE_SIZE = 5;
+
+    private final DailyStatRepository dailyStatRepository;
+
+    public StatResponse findQueryCount(String query, LocalDate date) {
+        long count = dailyStatRepository.countByQueryAndCreatedAtBetween(
+                query,
+                date.atStartOfDay(),
+                date.atTime(LocalTime.MAX)
+        );
+
+        return new StatResponse(query, count);
+    }
+
+    public List<StatResponse> findTop5Query() {
+        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+        return dailyStatRepository.findTopQuery(pageable);
+    }
+}
