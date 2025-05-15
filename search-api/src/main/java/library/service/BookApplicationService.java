@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +36,10 @@ public class BookApplicationService {
     @Transactional(readOnly = true)
     public StatResponse findQueryCount(String query, LocalDate date) {
         return dailyStatQueryService.findQueryCount(query, date);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StatResponse> findTop5Query() {
+        return dailyStatQueryService.findTop5Query();
     }
 }

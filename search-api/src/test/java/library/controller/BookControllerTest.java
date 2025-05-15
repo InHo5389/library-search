@@ -57,4 +57,15 @@ class BookControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("")
+    void findTop5Query() throws Exception {
+        //given
+        //when
+        //then
+        mockMvc.perform(get("/v1/books/stats/ranking"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }

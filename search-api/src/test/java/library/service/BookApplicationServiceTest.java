@@ -82,4 +82,30 @@ class BookApplicationServiceTest {
         assertThat(response.getCount()).isEqualTo(2);
         assertThat(response.getQuery()).isEqualTo(query);
     }
+
+    @Test
+    @DisplayName("findTop5Query 호출 시 상위 5개가 응답된다.")
+    void findTop5Query() {
+        //given
+        List<StatResponse> searchResponses = List.of(
+                new StatResponse("HTTP", 10L),
+                new StatResponse("JAVA", 8L),
+                new StatResponse("KAFKA", 7L),
+                new StatResponse("PYTHON", 3L),
+                new StatResponse("DOCKER", 2L)
+        );
+        when(dailyStatQueryService.findTop5Query()).thenReturn(searchResponses);
+        //when
+        List<StatResponse> responseList = bookApplicationService.findTop5Query();
+        //then
+        assertThat(responseList).hasSize(5)
+                .extracting("query", "count")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple("HTTP", 10L),
+                        Tuple.tuple("JAVA", 8L),
+                        Tuple.tuple("KAFKA", 7L),
+                        Tuple.tuple("PYTHON", 3L),
+                        Tuple.tuple("DOCKER", 2L)
+                );
+    }
 }
