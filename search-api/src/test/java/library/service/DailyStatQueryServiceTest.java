@@ -40,7 +40,7 @@ class DailyStatQueryServiceTest {
         when(dailyStatRepository.countByQueryAndCreatedAtBetween(query, startOfDay, endOfDay))
                 .thenReturn(count);
         //when
-        StatResponse response = dailyStatQueryService.findQueryCount(query, LocalDate.now());
+        StatResponse response = dailyStatQueryService.findQueryCount(query, today);
         //then
         assertThat(response.getCount()).isEqualTo(count);
         assertThat(response.getQuery()).isEqualTo(query);

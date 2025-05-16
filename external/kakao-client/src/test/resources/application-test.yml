@@ -1,0 +1,5 @@
+external:
+  kakao:
+    url: https://dapi.kakao.com
+    headers:
+      rest-api-key: ${KAKAO_REST_API_KEY}

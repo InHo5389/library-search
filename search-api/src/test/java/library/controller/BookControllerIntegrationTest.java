@@ -109,8 +109,8 @@ class BookControllerIntegrationTest {
                 )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorMessage").value(containsString("페이지 번호는 1이상이어야 합니다.")))
-                .andExpect(jsonPath("$.errorType").value("INVALID_PAREMETER"));
+                .andExpect(jsonPath("$.errorMessage").value(containsString("메서드 인자 형식이 틀렸습니다.")))
+                .andExpect(jsonPath("$.errorType").value("METHOD_ARGUMENT_TYPE_MISMATCH"));
     }
     @Test
     @DisplayName("size가 10001을 초과하면 BadRequest 응답반환된다.")

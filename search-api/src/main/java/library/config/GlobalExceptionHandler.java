@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,21 +31,28 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
         log.error("NoResourceFound Exception occurred. message={}, className={}", e.getMessage(), e.getClass().getName());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(ErrorType.NO_RESOURCE.getDescription(),  ErrorType.NO_RESOURCE));
+                .body(new ErrorResponse(ErrorType.NO_RESOURCE.getDescription(), ErrorType.NO_RESOURCE));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("MissingServletRequestParameter Exception occurred. parameterName={}, message={}", e.getParameterName(), e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(ErrorType.MISSING_REQUEST_PARAMETER.getDescription(),  ErrorType.MISSING_REQUEST_PARAMETER));
+                .body(new ErrorResponse(ErrorType.MISSING_REQUEST_PARAMETER.getDescription(), ErrorType.MISSING_REQUEST_PARAMETER));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValid Exception occurred. message={}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH.getDescription(), ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("MethodArgumentTypeMismatch Exception occurred. message={}", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH.getDescription(),  ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH));
+                .body(new ErrorResponse(ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH.getDescription(), ErrorType.METHOD_ARGUMENT_TYPE_MISMATCH));
     }
 
     @ExceptionHandler(BindException.class)
@@ -53,12 +61,12 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(createMessage(e), ErrorType.INVALID_PAREMETER));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error("Exception, message={},className={}", e.getMessage(), e.getClass().getName());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(ErrorType.UNKNOWN.getDescription(), ErrorType.UNKNOWN));
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+//        log.error("Exception, message={},className={}", e.getMessage(), e.getClass().getName());
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body(new ErrorResponse(ErrorType.UNKNOWN.getDescription(), ErrorType.UNKNOWN));
+//    }
 
     private String createMessage(BindException e) {
         // getDefaultMessage()는 @Nullable이기에 메시지를 세팅하지 않으면 null값이 나올수 있음
