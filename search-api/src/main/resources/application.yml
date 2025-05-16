@@ -2,7 +2,9 @@ spring:
   profiles:
     active: local
   config:
-    import: application-naver-client.yml
+    import:
+      - application-naver-client.yml
+      - application-kakao-client.yml
   h2:
     console:
       enabled: true
@@ -17,3 +19,14 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 100
+        minimum-number-of-calls: 10
+        wait-duration-in-open-state:
+          seconds: 20
+        failure-rate-threshold: 50
+        permitted-number-of-calls-in-half-open-state: 10

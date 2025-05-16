@@ -3,6 +3,7 @@ rootProject.name = 'library-search'
 <<<<<<< HEAD
 include 'common'
 include 'external:naver-client'
+include 'external:kakao-client'
 include 'search-api'
 include 'external'
 

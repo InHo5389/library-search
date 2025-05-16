@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class NaverClientConfiguration {
 
-    @Bean
+    @Bean("kakaoRequestInterceptor")
     public RequestInterceptor requestInterceptor(
             @Value("${external.naver.headers.client-id}") String clientId,
             @Value("${external.naver.headers.client-secret}") String clientSecret
