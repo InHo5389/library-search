@@ -34,6 +34,9 @@ dependencies {
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.8.8'
+
+	// circuitbreaker
+	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 }
 
 tasks.named('test') {
